@@ -20,6 +20,11 @@ CORS(app)
 def home():
     return jsonify({"message": "✅ Flask Spam API is running!"}), 200
 
+# 🔁 Ping route for cron jobs or uptime pings
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({"status": "pong", "message": "✅ Ping success!"}), 200
+
 # 📨 Predict endpoint (strict match for /predict)
 @app.route('/predict', methods=['POST'])
 def predict_spam():
@@ -49,6 +54,6 @@ def predict_spam():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 🔌 Run locally (ignored by Render)
+# 🔌 Run locally (ignored by platforms like Render)
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
