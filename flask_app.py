@@ -1,6 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pickle
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)  # Suppress default request logs
+
 
 # 🔁 Load the saved model and vectorizer
 try:
@@ -23,7 +27,9 @@ def home():
 # 🔁 Ping route for cron jobs or uptime pings
 @app.route('/ping', methods=['GET'])
 def ping():
-    return jsonify({"status": "pong", "message": "✅ Ping success!"}), 200
+    # Do not print anything here
+    return '', 204  # No Content
+
 
 # 📨 Predict endpoint (strict match for /predict)
 @app.route('/predict', methods=['POST'])
