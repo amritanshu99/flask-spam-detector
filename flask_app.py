@@ -39,7 +39,8 @@ def home():
 
 @app.route("/ping", methods=["GET"])
 def ping():
-    return "", 204
+    logger.info("🔁 /ping received")
+    return "", 204  # Used for cron-job.org pings
 
 @app.route("/predict", methods=["POST"])
 def predict_spam():
@@ -70,10 +71,10 @@ def predict_spam():
 
     except Exception as e:
         logger.error(f"❌ Prediction error: {e}")
-        traceback.print_exc(limit=1)  # Avoid verbose trace
+        traceback.print_exc(limit=1)
         return jsonify({"error": "Failed to get spam prediction"}), 500
 
-# 🔁 Run app
-if __name__ == "__main__":
-    logger.info("🚀 Starting Flask app")
-    app.run(host="0.0.0.0", port=5000)
+# ❌ DO NOT INCLUDE app.run() for Render
+# Render uses Gunicorn, which imports `app` object automatically
+# Keep this file named `flask_app.py` and Render's start command as:
+# gunicorn flask_app:app --bind 0.0.0.0:$PORT
